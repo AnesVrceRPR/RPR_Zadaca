@@ -10,6 +10,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        evaluate( "( 1 + ( 5 * 20 ) ) " );
+        evaluate( "( 1 + 5 ) " );
     }
 }
