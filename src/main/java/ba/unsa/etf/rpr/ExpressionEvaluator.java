@@ -13,11 +13,16 @@ public class ExpressionEvaluator {
      */
     public static double evaluate(String izraz){
 
+        boolean ZadnjiUnesenBrojIliOperator = false;
+
+        if(izraz.equals("")) return 0;
+
         int BrojOtvorenihZagrada = 0;
 
         Stack <String> operatori = new Stack <String> ();
         Stack <Double> brojevi = new Stack <Double> ();
 
+        try {
 
         for (String znak: izraz.split(" "))
         {
@@ -33,7 +38,6 @@ public class ExpressionEvaluator {
 
                 String operator = operatori.pop();
                 double broj = brojevi.pop();
-
 
                 if(operator.equals("+"))  broj = broj + brojevi.pop();
                 else if(operator.equals("-"))  broj = brojevi.pop() - broj;
@@ -56,17 +60,16 @@ public class ExpressionEvaluator {
                 }
                 brojevi.push(broj);
             }
-            else {
-                try {
-                    brojevi.push(Double.parseDouble(znak));
-                } catch (Exception e)
-                {
-                    throw new RuntimeException("Neispravan format izraza");
-                }
-            }
+            else brojevi.push(Double.parseDouble(znak));
+        }
+
+        } catch (Exception e)
+        {
+            throw new RuntimeException("Neispravan format izraza");
         }
 
         if(BrojOtvorenihZagrada != 0) throw new RuntimeException("Neispravan format izraza");
+        if(!operatori.isEmpty()) throw new RuntimeException("Neispravan format izraza");
 
         return brojevi.pop();
     }

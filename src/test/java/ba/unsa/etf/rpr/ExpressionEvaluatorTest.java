@@ -83,5 +83,48 @@ class ExpressionEvaluatorTest {
     assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
   }
 
+  /**
+   * Testiranje da li metoda baca izuzetak kada joj je proslijedjen neispravan format sa sinusom
+   */
+  @Test
+  void testNeispravnogFormataSaSinusom()
+  {
+    String s = "( 1 + ( sqrt ( 4 ) ) )";
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+  }
+
+  /**
+   * * Testiranje da li metoda baca izuzetak kada je sinusu proslijedjen parametar koji nije unutar zagarada
+   */
+  @Test
+  void testSinusaBezZagradaZaParametar()
+  {
+    String s = "( 1 + ( sqrt 4 ) )";
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+  }
+
+  /**
+   * * Testiranje da li funkcija radi ispravno za opsirniji izraz
+   */
+  @Test
+  void testOpsirnijegIzraza()
+  {
+    String s = "( ( 4 * 5 ) + sqrt ( ( 32 / 2 ) ) )";
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertEquals(24, evaluator.evaluate(s));
+  }
+
+  /**
+   * * Testiranje da li funkcija vraca vrijednost 0 za prazan string
+   */
+  @Test
+  void testPraznogString()
+  {
+    String s = "";
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertEquals(0, evaluator.evaluate(s));
+  }
 
 }

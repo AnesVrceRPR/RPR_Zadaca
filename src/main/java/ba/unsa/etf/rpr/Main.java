@@ -15,6 +15,8 @@ public class Main
      */
     public static void main( String[] args )
     {
-        System.out.println(evaluate( "( 2 + sqrt ( 2 ) )" ));
+        //System.out.println(evaluate(args[0]));
+        System.out.println(evaluate("( 1 + ( sqrt 4 ) )"));
+        System.out.println(evaluate("( 1 + sqrt ( 4 ) )"));
     }
 }
