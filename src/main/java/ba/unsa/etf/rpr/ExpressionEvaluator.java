@@ -3,11 +3,14 @@ package ba.unsa.etf.rpr;
 import java.util.Stack;
 
 /**
- * Klasa za racunanje
+ * Klasa za racunanje matematickog izraza
  */
 public class ExpressionEvaluator {
-    private double rezultat;
-
+    /**
+     * Metoda koja sluzi za računanje matematickog izraza proslijedjenog kao string
+     * @param izraz tipa String - sastoji se od zagrada, operatora i brojeva, medjusobno odvojenih razmacima, u protivnom baca izuzetak
+     * @return tipa double - predstavlja rezultat aritmetičkih operacija izvrsenih nad operandima
+     */
     public static double evaluate(String izraz){
 
         int BrojOtvorenihZagrada = 0;

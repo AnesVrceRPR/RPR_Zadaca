@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions. *;
 
+/**
+ * Klasa za testiranje klase ExpressionEvaluator
+ */
 class ExpressionEvaluatorTest {
   /**
    * Testiranje da li metoda evaluate() vraća ispravan rezultat
