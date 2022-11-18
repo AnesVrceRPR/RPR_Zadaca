@@ -9,8 +9,8 @@ public class ExpressionEvaluator {
     private double rezultat;
 
     public static double evaluate(String izraz){
-        // ( 6 + 7 (
 
+        int BrojOtvorenihZagrada = 0;
 
         Stack <String> operatori = new Stack <String> ();
         Stack <Double> brojevi = new Stack <Double> ();
@@ -18,7 +18,7 @@ public class ExpressionEvaluator {
 
         for (String znak: izraz.split(" "))
         {
-            if(znak.equals("("));
+            if(znak.equals("(")) BrojOtvorenihZagrada++;
             else if(znak.equals("+"))  operatori.push(znak);
             else if(znak.equals("-"))  operatori.push(znak);
             else if(znak.equals("*"))  operatori.push(znak);
@@ -26,6 +26,8 @@ public class ExpressionEvaluator {
             else if(znak.equals("sqrt"))  operatori.push(znak);
             else if(znak.equals(")"))
             {
+                BrojOtvorenihZagrada--;
+
                 String operator = operatori.pop();
                 double broj = brojevi.pop();
 
@@ -60,6 +62,8 @@ public class ExpressionEvaluator {
                 }
             }
         }
+
+        if(BrojOtvorenihZagrada != 0) throw new RuntimeException("Neispravan format izraza");
 
         return brojevi.pop();
     }

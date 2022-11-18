@@ -48,7 +48,7 @@ class ExpressionEvaluatorTest {
     assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
   }
   /**
-   * Testiranje da li se bacak izuzetak kod dijeljenje sa nulom
+   * Testiranje da li se baca izuzetak kod dijeljenje sa nulom
    */
   @Test
   void testDijeljenjeSaNulom()
@@ -59,7 +59,7 @@ class ExpressionEvaluatorTest {
   }
 
   /**
-   * Testiranje da li se bacak izuzetak kada se funkciji sin() proslijedi negativan broj
+   * Testiranje da li se baca izuzetak kada se funkciji sin() proslijedi negativan broj
    */
   @Test
   void testSinusOdNegBroja()
@@ -69,6 +69,9 @@ class ExpressionEvaluatorTest {
     assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Funkciji sin() proslijedjen negativan broj.");
   }
 
+  /**
+   * Testiranje da li su zatvorene sve zagrade koje su se otvorile
+   */
   @Test
   void testDaLiSuSveZagradeZatvorene()
   {
