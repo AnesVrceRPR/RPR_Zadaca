@@ -8,15 +8,7 @@ import java.util.Stack;
 public class ExpressionEvaluator {
     private double rezultat;
 
-    public static double evaluate(String izraz)
-    {
-// ( 2 + ( 3 + 5 ) )
-        //(i == ( i+1
-        // ((
-        //string-split(" ");
-        // (( 3 + g )
-        // /0, sqrt(-4)
-        //( 2 + sqrt ( 5 ) )
+    public static double evaluate(String izraz){
         // ( 6 + 7 (
 
 
@@ -41,11 +33,32 @@ public class ExpressionEvaluator {
                 if(operator.equals("+"))  broj = broj + brojevi.pop();
                 else if(operator.equals("-"))  broj = brojevi.pop() - broj;
                 else if(operator.equals("*"))  broj = brojevi.pop() * broj;
-                else if(operator.equals("/"))  broj = brojevi.pop() / broj;
-                else if(operator.equals("sqrt"))  broj = Math.sqrt(broj);
+                else if(operator.equals("/"))
+                {
+                    if(broj == 0) throw new RuntimeException("Dijeljenje sa nulom");
+                    else broj = brojevi.pop() / broj;
+                }
+
+                else if(operator.equals("sqrt"))
+                {
+                    try {
+                        broj = Math.sqrt(broj);
+                     }
+                    catch (Exception e)
+                    {
+                        throw new RuntimeException("Funkciji sin() proslijedjen negativan broj.");
+                    }
+                }
                 brojevi.push(broj);
             }
-            else brojevi.push(Double.parseDouble(znak));
+            else {
+                try {
+                    brojevi.push(Double.parseDouble(znak));
+                } catch (Exception e)
+                {
+                    throw new RuntimeException("Neispravan format izraza");
+                }
+            }
         }
 
         return brojevi.pop();
