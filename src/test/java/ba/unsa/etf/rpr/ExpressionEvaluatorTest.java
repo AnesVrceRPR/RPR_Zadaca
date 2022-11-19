@@ -157,7 +157,7 @@ public class ExpressionEvaluatorTest {
   }
 
   /**
-   * Testiranje dodatnih slučajeva
+   * Testiranje dodatnih slucajeva
    */
   @Test
   void DodatniTest(){

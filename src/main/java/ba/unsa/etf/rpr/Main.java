@@ -20,7 +20,7 @@ public class Main
             String izraz = new String(args[0]);
             System.out.println(izraz + " = " + evaluator.evaluate(izraz));
         }
-        catch (Exception e){
+        catch (RuntimeException e){
             System.out.println(e.getMessage());
         }
     }
