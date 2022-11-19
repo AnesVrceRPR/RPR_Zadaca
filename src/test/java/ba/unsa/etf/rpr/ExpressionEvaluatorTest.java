@@ -1,18 +1,22 @@
 package ba.unsa.etf.rpr;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-import static org.junit.jupiter.api.Assertions. *;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Klasa za testiranje klase ExpressionEvaluator
+ * Klasa za testiranje klase ExpressionEvaluator. Testovi pokrivaju dosta različitih situacija: Dijeljenje sa nulom, prosljedjivanje negativnog
+ * broja funkciji sqrt, slovo u izrazu umjesto broja, razne kombinacije sa zagradma, dupli brojevi/dupli operatori...
  */
-class ExpressionEvaluatorTest {
+
+public class ExpressionEvaluatorTest {
+
   /**
    * Testiranje da li metoda evaluate() vraća ispravan rezultat
    */
   @Test
-  void testFunkcionalnosti()
+  void testOsnovneFunkcionalnosti()
   {
     String s = "( 2 + ( 4 * 5 ) )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
@@ -23,12 +27,12 @@ class ExpressionEvaluatorTest {
    * Testiranje da li se umjesto nekog broja nalazi slovo
    */
   @Test
-    void testSlovoUmjestoBroja()
-    {
-      String s = "( 2 + k )";
-      ExpressionEvaluator evaluator = new ExpressionEvaluator();
-      assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
-    }
+  void testSlovoUmjestoBroja()
+  {
+    String s = "( 2 + k )";
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
+  }
 
   /**
    * Testiranje da li između svakog karaktera postoji razmak
@@ -38,7 +42,7 @@ class ExpressionEvaluatorTest {
   {
     String s = "( 2+ 4)";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
   }
   /**
    * Testiranje da li postoji odgovarajuci broj zagrada u odnosu na broj operatora
@@ -48,7 +52,7 @@ class ExpressionEvaluatorTest {
   {
     String s = "( 2 + ( 4 ) )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
   }
   /**
    * Testiranje da li se baca izuzetak kod dijeljenje sa nulom
@@ -58,29 +62,32 @@ class ExpressionEvaluatorTest {
   {
     String s = "( 2 / 0 )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    Exception e = assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
+    assertTrue(e.getMessage().contains("djeljenje s nulom"));
   }
 
   /**
-   * Testiranje da li se baca izuzetak kada se funkciji sin() proslijedi negativan broj
+   * Testiranje da li metoda baca izuzetak kada se sqrt-u proslijedi negativan broj
    */
   @Test
-  void testSinusOdNegBroja()
+  void testSqrtOdNegBroja()
   {
-    String s = "( 2 + ( sin ( 2 ) ) )";
+    String s = "( 2 + sqrt ( -2 ) )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Funkciji sin() proslijedjen negativan broj.");
+
+    Exception e = assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
+    assertTrue(e.getMessage().contains("sqrt-u proslijedjen negativan broj."));
   }
 
   /**
-   * Testiranje da li su zatvorene sve zagrade koje su se otvorile
+   * Testiranje da li su zatvorene sve otvorene zagrade
    */
   @Test
   void testDaLiSuSveZagradeZatvorene()
   {
     String s = "( 2 + 3 (";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
   }
 
   /**
@@ -91,7 +98,7 @@ class ExpressionEvaluatorTest {
   {
     String s = "( 1 + ( sqrt ( 4 ) ) )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
   }
 
   /**
@@ -102,7 +109,7 @@ class ExpressionEvaluatorTest {
   {
     String s = "( 1 + ( sqrt 4 ) )";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s), "Neispravan format izraza");
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s));
   }
 
   /**
@@ -117,14 +124,50 @@ class ExpressionEvaluatorTest {
   }
 
   /**
-   * * Testiranje da li funkcija vraca vrijednost 0 za prazan string
+   * * Testiranje da li funkcija baca izuzezak za prazne izraze
    */
   @Test
   void testPraznogString()
   {
-    String s = "";
     ExpressionEvaluator evaluator = new ExpressionEvaluator();
-    assertEquals(0, evaluator.evaluate(s));
+    String s1 = "";
+    String s2 = "( )";
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s1));
+    assertThrows(RuntimeException.class, () -> evaluator.evaluate(s2));
+  }
+
+  /**
+   * * Testiranje da li funkcija baca izuzetak kada se u izrazu nalaze dva broja koja nisu odvojena ni operatorom ni zagradama
+   */
+  @Test
+  void testDvaUzastopnaBroja()
+  {
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 4 + ( 1 + 2 2 ) )");});
+  }
+
+  /**
+   * * Testiranje da li funkcija baca izuzetak kada su u izrazu zagrade nepravilno rasporedjene
+   */
+  @Test
+  void testNepravilneKombinacijeZagrada()
+  {
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 100 * 5 + ( 4 ) )");});
+  }
+
+  /**
+   * Testiranje dodatnih slučajeva
+   */
+  @Test
+  void DodatniTest(){
+    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 2 - ( 3 ++ 5 ) )");});
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 2 - ( 3 + + 5 ) )");});
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 5 + 5 );"); });
+    assertThrows(RuntimeException.class, () -> {evaluator.evaluate("( 2 - 2 - 2 )");});
+
   }
 
 }

@@ -15,8 +15,13 @@ public class Main
      */
     public static void main( String[] args )
     {
-        //System.out.println(evaluate(args[0]));
-        System.out.println(evaluate("( 1 + ( sqrt 4 ) )"));
-        System.out.println(evaluate("( 1 + sqrt ( 4 ) )"));
+        try{
+            ExpressionEvaluator evaluator = new ExpressionEvaluator();
+            String izraz = new String(args[0]);
+            System.out.println(izraz + " = " + evaluator.evaluate(izraz));
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
